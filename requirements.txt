@@ -4,8 +4,8 @@ langchain-openai
 langchain-core
 pydantic
 langgraph
+datasets
+pandas
 
-# datasets
-# pandas
 # streamlit
 # numpy
