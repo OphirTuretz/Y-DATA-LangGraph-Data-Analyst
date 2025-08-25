@@ -1,10 +1,11 @@
 python-dotenv
+langchain
 langchain-openai
 langchain-core
 pydantic
 langgraph
 
-# streamlit
 # datasets
 # pandas
+# streamlit
 # numpy
