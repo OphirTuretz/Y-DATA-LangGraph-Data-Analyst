@@ -13,6 +13,8 @@ from llm import llm
 from general_tools import (
     get_possible_intents_tool,
     get_possible_categories_tool,
+    select_semantic_intent_tool,
+    select_semantic_category_tool,
     finish_tool,
 )
 
@@ -255,13 +257,15 @@ def show_examples_tool(
 structured_query_agent_tool_list = [
     get_possible_intents_tool,
     get_possible_categories_tool,
+    select_semantic_intent_tool,
+    select_semantic_category_tool,
+    finish_tool,
     sort_dict_by_values_tool,
     sum_tool,
     count_category_tool,
     count_intent_tool,
     count_rows_tool,
     show_examples_tool,
-    finish_tool,
 ]
 
 
