@@ -22,26 +22,36 @@ from general_tools import (
 # Tools
 
 
-# class SortDictByValuesInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["sort_dict_by_values"]
-#     d: str = Field(
-#         ...,
-#         description="a JSON data object that can be translated to dictionary by json.loads() to sort by its values.",
-#     )
-#     ascending: bool = Field(
-#         False, description="Whether to sort in ascending order. Defaults to False."
-#     )
-# def sort_dict_by_values(d: dict, ascending: bool = False) -> dict:
-#     """
-#     Sort a dictionary by its values.
-#     Args:
-#         d (dict): The dictionary to sort.
-#         ascending (bool): Whether to sort in ascending order. Defaults to False.
-#     Returns:
-#         dict: A new dictionary sorted by values.
-#     """
-#     return dict(sorted(d.items(), key=lambda item: item[1], reverse=not ascending))
+@tool
+def sum_tool(
+    reasoning: str,
+    a: int,
+    b: int,
+    tool_call_id: Annotated[str, InjectedToolCallId],
+) -> Command:
+    """
+    Sum two numbers.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        a (int): First number to sum.
+        b (int): Second number to sum.
+        tool_call_id (str): The tool call ID for tracking.
+    Returns:
+        Command: A command containing the sum of a and b.
+    """
+    result = a + b
+    return Command(
+        update={
+            "messages": [
+                ToolMessage(
+                    json.dumps({"sum": result}),
+                    tool_call_id=tool_call_id,
+                )
+            ],
+        }
+    )
+
+
 @tool
 def sort_dict_by_values_tool(
     reasoning: str,
@@ -75,55 +85,6 @@ def sort_dict_by_values_tool(
     )
 
 
-# class SumInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["sum"]
-#     a: int = Field(..., description="First number to sum.")
-#     b: int = Field(..., description="Second number to sum.")
-# def sum(a: float, b: float) -> float:
-#     """
-#     Sum two numbers.
-#     Args:
-#         a (float): First number.
-#         b (float): Second number.
-#     Returns:
-#         float: The sum of a and b.
-#     """
-#     return a + b
-@tool
-def sum_tool(
-    reasoning: str,
-    a: int,
-    b: int,
-    tool_call_id: Annotated[str, InjectedToolCallId],
-) -> Command:
-    """
-    Sum two numbers.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        a (int): First number to sum.
-        b (int): Second number to sum.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing the sum of a and b.
-    """
-    result = a + b
-    return Command(
-        update={
-            "messages": [
-                ToolMessage(
-                    json.dumps({"sum": result}),
-                    tool_call_id=tool_call_id,
-                )
-            ],
-        }
-    )
-
-
-# class CountCategoryInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["count_category"]
-#     category: str = Field(..., description="Category to count in the DataFrame.")
 @tool
 def count_category_tool(
     reasoning: str,
@@ -154,10 +115,6 @@ def count_category_tool(
     )
 
 
-# class CountIntentInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["count_intent"]
-#     intent: str = Field(..., description="Intent to count in the DataFrame.")
 @tool
 def count_intent_tool(
     reasoning: str,
@@ -188,9 +145,6 @@ def count_intent_tool(
     )
 
 
-# class CountRowsInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["count_rows"]
 @tool
 def count_rows_tool(
     reasoning: str,
@@ -211,7 +165,7 @@ def count_rows_tool(
         update={
             "messages": [
                 ToolMessage(
-                    json.dumps({"count": count}),
+                    json.dumps({"number_of_rows": count}),
                     tool_call_id=tool_call_id,
                 )
             ],
@@ -219,10 +173,6 @@ def count_rows_tool(
     )
 
 
-# class ShowExamplesInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["show_examples"]
-#     n: int = Field(..., description="Number of examples to show from the DataFrame.")
 @tool
 def show_examples_tool(
     reasoning: str,
@@ -273,6 +223,8 @@ structured_query_agent_tool_list = [
 
 
 def structured_query_agent_node(state: UserQueryState) -> UserQueryState:
+
+    # TODO: implement MAX_DEPTH
 
     user_query = state["user_query"]
     system_prompt = "Choose the correct tool to answer the user query."

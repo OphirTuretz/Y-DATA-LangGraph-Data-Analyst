@@ -40,10 +40,6 @@ class SummaryResponse(BaseModel):
     )
 
 
-# class SummarizeInput(BaseModel):
-#     reasoning: str = Field(..., description="Reasoning for the function call.")
-#     function_type: Literal["summarize"]
-#     user_request: str = Field(..., description="User request to summarize.")
 @tool
 def summarize_tool(
     reasoning: str,
