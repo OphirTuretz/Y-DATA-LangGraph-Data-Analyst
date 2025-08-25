@@ -21,6 +21,20 @@ ROUTER_SYSTEM_PROMPT_FILE_PATH = os.path.join(
     PROMPTS_DIR, ROUTER_SYSTEM_PROMPT_FILE_NAME
 )
 
+
+# Agents
+MAX_ITERATIONS = 50
+
+
+# Structured Query Agent
+STRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_NAME = (
+    "structured_query_agent_system_prompt.txt"
+)
+STRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_PATH = os.path.join(
+    PROMPTS_DIR, STRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_NAME
+)
+
+
 # Unstructured Query Agent
 SUMMARIZE_BATCH_PROMPT_FILE_NAME = "summarize_batch_prompt.txt"
 SUMMARIZE_BATCH_PROMPT_FILE_PATH = os.path.join(

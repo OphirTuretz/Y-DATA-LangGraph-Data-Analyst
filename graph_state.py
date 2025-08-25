@@ -12,4 +12,5 @@ class UserQueryState(TypedDict):
     dataset: Dataset
     is_complete: bool
     final_response: str
+    iteration_count: int
     # function_results: List[str]

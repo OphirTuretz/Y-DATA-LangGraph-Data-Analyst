@@ -1,6 +1,6 @@
 import json
 from typing_extensions import Annotated
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage, AIMessage
 from langchain_core.tools import tool, InjectedToolCallId
 from langgraph.prebuilt import InjectedState, ToolNode
 from langgraph.types import Command
@@ -17,6 +17,7 @@ from general_tools import (
     select_semantic_category_tool,
     finish_tool,
 )
+from app.const import STRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_PATH, MAX_ITERATIONS
 
 
 # Tools
@@ -222,24 +223,42 @@ structured_query_agent_tool_list = [
 # Nodes
 
 
-def structured_query_agent_node(state: UserQueryState) -> UserQueryState:
+def structured_query_agent_node(state: UserQueryState):  # -> UserQueryState:
 
     # TODO: implement MAX_DEPTH
 
-    user_query = state["user_query"]
-    system_prompt = "Choose the correct tool to answer the user query."
-    messages = [SystemMessage(content=system_prompt), HumanMessage(content=user_query)]
+    # user_message = state["user_message"]
+    # previous_steps = state.get("reasoning_steps", [])
+    # tool_results = state.get("tool_results", [])
+    iteration_count = state.get("iteration_count", 0)
+
+    if iteration_count >= MAX_ITERATIONS:
+        return {
+            "messages": [
+                AIMessage(
+                    content="Maximum iterations reached. Stopping further processing."
+                )
+            ],
+            "final_response": "Sorry, the request caused too many internal steps and could not be completed.",
+            "is_complete": True,
+        }
+
+    new_messages = []
+
+    if iteration_count == 0:
+        system_prompt = read_prompt_file(STRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_PATH)
+        new_messages = [SystemMessage(content=system_prompt)]
 
     llm_with_tools = llm.bind_tools(
         tools=structured_query_agent_tool_list,
         parallel_tool_calls=False,
     )
-    response = llm_with_tools.invoke(messages)
-    state["messages"] = (
-        ["This is a response from the structured query agent."] + messages + [response]
-    )
+    response = llm_with_tools.invoke(state["messages"] + new_messages)
 
-    return state
+    return {
+        "messages": new_messages + [response],
+        "iteration_count": iteration_count + 1,
+    }
 
 
 structured_query_agent_tool_node = ToolNode(structured_query_agent_tool_list)
