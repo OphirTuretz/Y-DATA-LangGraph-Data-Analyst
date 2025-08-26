@@ -6,6 +6,6 @@ pydantic
 langgraph
 datasets
 pandas
+streamlit
 
-# streamlit
 # numpy

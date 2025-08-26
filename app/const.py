@@ -1,5 +1,8 @@
 import os
 
+# General
+DATE_TIME_PATTERN = "%H:%M:%S"
+
 
 # Constants for file paths
 PROMPTS_DIR = "prompts"
