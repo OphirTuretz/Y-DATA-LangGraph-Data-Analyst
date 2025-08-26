@@ -1,22 +1,58 @@
+from typing import Any, Optional, Dict, List
 from app.const import DATASET_NAME, DATASET_SPLIT_NAME
 from datasets import load_dataset
 import pandas as pd
-from typing import List
 
 
 class Dataset:
-    def __init__(self, dataset_name=DATASET_NAME, split=DATASET_SPLIT_NAME):
-        self.dataset_name = dataset_name
-        self.split = split
-        self.dataset = self.load_dataset()
+    singleton_dataset: Optional[pd.DataFrame] = None
 
-    def load_dataset(self):
+    def __init__(
+        self,
+        filter_by: Dict[str, List[str]] = None,
+    ):
+        if filter_by is None:
+            filter_by = {"category": [], "intent": []}
+
+        self.filter_by: Dict[str, List[str]] = filter_by
+        if Dataset.singleton_dataset is None:
+            Dataset.singleton_dataset = self.load_dataset()
+
+    def load_dataset(self) -> Optional[pd.DataFrame]:
         try:
-            dataset = load_dataset(self.dataset_name, split=self.split)
+            dataset = load_dataset(DATASET_NAME, split=DATASET_SPLIT_NAME)
             return dataset.to_pandas()
         except Exception as e:
             print(f"Error loading dataset: {e}")
             return None
+
+    @property
+    def dataset(self) -> pd.DataFrame:
+        if Dataset.singleton_dataset is None:
+            raise ValueError("Dataset not loaded properly.")
+
+        filtered_df = Dataset.singleton_dataset.copy()
+
+        for column, values in self.filter_by.items():
+            if values:
+                filtered_df = filtered_df[filtered_df[column].isin(values)]
+
+        return filtered_df
+
+    # For checkpointing (serialization)
+    def __getstate__(self) -> Dict[str, Any]:
+        return {
+            "filter_by": self.filter_by,
+        }
+
+    def __setstate__(self, state: Dict[str, Any]) -> None:
+        self.filter_by = state["filter_by"]
+        if Dataset.singleton_dataset is None:
+            Dataset.singleton_dataset = self.load_dataset()
+
+    def __reduce__(self):
+        # Return a tuple of (callable, args) to reconstruct the object
+        return (self.__class__, (self.filter_by,))
 
     def get_possible_intents(self) -> List[str]:
         """
@@ -34,6 +70,21 @@ class Dataset:
         """
         return self.dataset["category"].unique().tolist()
 
+    def set_filter(
+        self, category_names: List[str] = None, intent_names: List[str] = None
+    ) -> "Dataset":
+        """Set filters for categories and/or intents"""
+        if category_names is not None:
+            self.filter_by["category"] = category_names
+        if intent_names is not None:
+            self.filter_by["intent"] = intent_names
+        return self
+
+    def clear_filters(self) -> "Dataset":
+        """Reset all filters"""
+        self.filter_by = {"category": [], "intent": []}
+        return self
+
     def select_semantic_intent(self, intent_names: List[str]) -> "Dataset":
         """
         Select rows from the DataFrame where the 'intent' column matches any of the provided intent names.
@@ -42,8 +93,7 @@ class Dataset:
         Returns:
             self: The Dataset object with the filtered DataFrame.
         """
-        self.dataset = self.dataset[self.dataset["intent"].isin(intent_names)]
-        return self
+        return self.set_filter(intent_names=intent_names)
 
     def select_semantic_category(self, category_names: List[str]) -> "Dataset":
         """
@@ -53,8 +103,7 @@ class Dataset:
         Returns:
             self: The Dataset object with the filtered DataFrame.
         """
-        self.dataset = self.dataset[self.dataset["category"].isin(category_names)]
-        return self
+        return self.set_filter(category_names=category_names)
 
     def count_rows(self) -> int:
         """

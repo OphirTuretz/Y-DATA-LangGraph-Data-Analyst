@@ -1,5 +1,7 @@
+import sqlite3
 from langgraph.graph import StateGraph, START, END
-from langgraph.prebuilt import ToolNode
+from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 
 from graph_state import UserQueryState
 from router import router_node, get_query_label, QueryLabel
@@ -12,6 +14,7 @@ from unstructured_query_agent import (
     unstructured_query_agent_tool_node,
 )
 from out_of_scope_query_handler import out_of_scope_handler_node
+from app.const import CHECKPOINTS_DB_FILE_PATH
 
 
 def is_complete(state: UserQueryState) -> bool:
@@ -73,4 +76,8 @@ workflow_builder.add_conditional_edges(
 
 workflow_builder.add_edge("out_of_scope_handler", END)
 
-workflow = workflow_builder.compile()
+conn = sqlite3.connect(CHECKPOINTS_DB_FILE_PATH, check_same_thread=False)
+serde = JsonPlusSerializer(pickle_fallback=True)
+checkpointer = SqliteSaver(conn, serde=serde)
+
+workflow = workflow_builder.compile(checkpointer=checkpointer)

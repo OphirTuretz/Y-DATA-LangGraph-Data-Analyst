@@ -6,6 +6,7 @@ DATE_TIME_PATTERN = "%H:%M:%S"
 
 # Constants for file paths
 PROMPTS_DIR = "prompts"
+DB_DIR = "."
 
 # Dataset
 DATASET_NAME = "bitext/Bitext-customer-support-llm-chatbot-training-dataset"
@@ -17,6 +18,16 @@ LLM_MODEL_NAME = "gpt-4o-mini"  # "gpt-3.5-turbo"  # "gpt-4o-mini"
 LLM_TEMPERATURE = 0.0
 LLM_TOP_P = 1.0
 DEFAULT_PARALLEL_TOOL_CALLS = False
+
+
+# Users and threads
+USERS_THREADS_DB_FILE_NAME = "users_threads.db"
+USERS_THREADS_DB_FILE_PATH = os.path.join(DB_DIR, USERS_THREADS_DB_FILE_NAME)
+
+
+# Checkpoints
+CHECKPOINTS_DB_FILE_NAME = "graph_state_checkpoints.db"
+CHECKPOINTS_DB_FILE_PATH = os.path.join(DB_DIR, CHECKPOINTS_DB_FILE_NAME)
 
 
 # Router

@@ -7,5 +7,7 @@ langgraph
 datasets
 pandas
 streamlit
+langgraph-checkpoint-sqlite
 
+# msgpack
 # numpy
