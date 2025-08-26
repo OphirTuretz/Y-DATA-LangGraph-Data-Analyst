@@ -70,20 +70,74 @@ def sort_dict_by_values_tool(
     Returns:
         Command: A command containing the sorted dictionary.
     """
-    d_dict = json.loads(d)
-    sorted_dict = dict(
-        sorted(d_dict.items(), key=lambda item: item[1], reverse=not ascending)
-    )
-    return Command(
-        update={
-            "messages": [
-                ToolMessage(
-                    json.dumps({"sorted_dict": sorted_dict}),
-                    tool_call_id=tool_call_id,
-                )
-            ],
-        }
-    )
+    try:
+        d_dict = json.loads(d)
+        sorted_dict = dict(
+            sorted(d_dict.items(), key=lambda item: item[1], reverse=not ascending)
+        )
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        json.dumps({"sorted_dict": sorted_dict}),
+                        tool_call_id=tool_call_id,
+                    )
+                ],
+            }
+        )
+    except Exception as e:
+        error_msg = f"Error processing function call: {str(e)}"
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        json.dumps({"error": error_msg}),
+                        tool_call_id=tool_call_id,
+                    )
+                ],
+            }
+        )
+
+
+@tool
+def len_tool(
+    reasoning: str,
+    object: str,
+    tool_call_id: Annotated[str, InjectedToolCallId],
+) -> Command:
+    """
+    Returns the number of items in an object, e.g., list, string, dictionary.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        object (str): A JSON object that can be translated to a sequence or a collection by json.loads() to count the number of items in it.
+        tool_call_id (str): The tool call ID for tracking.
+    Returns:
+        Command: A command containing the length of the object.
+    """
+    try:
+        length = len(json.loads(object))
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        json.dumps({"length": length}),
+                        tool_call_id=tool_call_id,
+                    )
+                ],
+            }
+        )
+    except Exception as e:
+        error_msg = f"Error processing function call: {str(e)}"
+        return Command(
+            update={
+                "messages": [
+                    ToolMessage(
+                        json.dumps({"error": error_msg}),
+                        tool_call_id=tool_call_id,
+                    )
+                ],
+            }
+        )
 
 
 @tool
@@ -212,6 +266,7 @@ structured_query_agent_tool_list = [
     select_semantic_category_tool,
     finish_tool,
     sort_dict_by_values_tool,
+    len_tool,
     sum_tool,
     count_category_tool,
     count_intent_tool,
