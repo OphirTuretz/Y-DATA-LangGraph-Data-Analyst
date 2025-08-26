@@ -16,11 +16,17 @@ Available tools (one per step):
   - If the user asks which **categories** or **intents** exist (e.g., “What categories exist?”, “List all intents”), call the corresponding `get_possible_*` tool and **return that list directly** via `finish_tool`.
   - Do **not** count, sort, or rank unless explicitly requested.
 
+- **Distributions (counts for every label)**
+  - For prompts like “Show intent distributions.” or “category distribution”, first call `get_possible_*` to get the **full list**.
+  - Then call the appropriate `count_*` tool **for every label** to build a complete mapping.
+  - You may sort with `sort_dict_by_values_tool` for readability, **but return the full distribution (all labels)** unless the user explicitly asks for “top N” or “most frequent”.  
+  - Only limit to top‑k when the user explicitly requests it.
+
 - **Counts / frequencies / top-k**
   - First call `get_possible_*` to obtain the **full list** of valid labels.
   - Then call the appropriate `count_*` tool **for every label in that list**, to build a complete mapping of all counts.
   - Only after collecting counts for **all labels** should you use `sort_dict_by_values_tool` to rank them.
-  - Report the **top 3–5** unless the user asks otherwise.
+  - Report the **top 3–5** **only** when the user explicitly asks for “top”, “most frequent”, or specifies “top N”.
 
 - **Examples**
   - If scoped by category/intent, ensure filtering first with `select_semantic_*` (irreversible).
@@ -41,13 +47,15 @@ Available tools (one per step):
 
 ### Output discipline
 - Keep internal reasoning private.
-- Be concise and factual in the **final_response** passed to `finish_tool`, including key numbers and (when relevant) a compact top-k list.
+- Be concise and factual in the **final_response** passed to `finish_tool`.
+- For distributions, include the **complete label→count mapping** (you may also add a compact “Top‑k summary” only if requested).
 
 ### Quick patterns
 - “What **categories** exist?” → `get_possible_categories_tool` → `finish_tool(...)`.
 - “What **intents** exist?” → `get_possible_intents_tool` → `finish_tool(...)`.
+- “Show **intent distribution**.” → `get_possible_intents_tool` → loop `count_intent_tool` for **all intents** → (optional) `sort_dict_by_values_tool` → **return full mapping** → `finish_tool(...)`.
+- “Most frequent **intents** (top 5)” → `get_possible_intents_tool` → loop `count_intent_tool` for **all intents** → build dictionary → `sort_dict_by_values_tool` → **return top 5** → `finish_tool(...)`.
 - “How many **categories** are there?” → `get_possible_categories_tool` → `len_tool(object="<returned JSON list>")` → `finish_tool(...)`.  
 - “How many **intents** exist?” → `get_possible_intents_tool` → `len_tool(object="<returned JSON list>")` → `finish_tool(...)`.
-- “Most frequent **intents** (top 5)” → `get_possible_intents_tool` → loop `count_intent_tool` for **all intents** → build dictionary → `sort_dict_by_values_tool` → `finish_tool(...)`.  
 - “How many **refund** requests did we get?” → `get_possible_intents_tool` → verify `"get_refund"` → `count_intent_tool(intent="get_refund")` → `finish_tool(...)`.  
 - “Show 3 examples from **REFUND**” → `get_possible_categories_tool` → `select_semantic_category_tool(["REFUND"])` → `show_examples_tool(n=3)` → `finish_tool(...)`.
