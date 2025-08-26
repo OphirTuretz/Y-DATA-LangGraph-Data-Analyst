@@ -12,6 +12,7 @@ from graph_state import UserQueryState
 from prompt import read_prompt_file
 from llm import llm
 from app.const import (
+    UNSTRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_PATH,
     SUMMARIZE_DEFAULT_BATCH_SIZE,
     SUMMARIZE_DEFAULT_N_BATCHES,
     SUMMARIZE_BATCH_PROMPT_FILE_PATH,
@@ -24,6 +25,7 @@ from general_tools import (
     select_semantic_category_tool,
     finish_tool,
 )
+from react_agent import react_agent_node
 
 
 # Tools
@@ -139,8 +141,12 @@ unstructured_query_agent_tool_list = [
 
 
 def unstructured_query_agent_node(state: UserQueryState) -> UserQueryState:
-    state["messages"] = ["This is a response from the unstructured query agent."]
-    return state
+
+    return react_agent_node(
+        state,
+        UNSTRUCTURED_QUERY_AGENT_SYSTEM_PROMPT_FILE_PATH,
+        unstructured_query_agent_tool_list,
+    )
 
 
 unstructured_query_agent_tool_node = ToolNode(unstructured_query_agent_tool_list)

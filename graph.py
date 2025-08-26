@@ -57,7 +57,20 @@ workflow_builder.add_conditional_edges(
     {True: END, False: "structured_query_agent"},
 )
 
-workflow_builder.add_edge("unstructured_query_agent", END)
+workflow_builder.add_conditional_edges(
+    "unstructured_query_agent",
+    is_complete,
+    {
+        True: END,
+        False: "unstructured_query_agent_tools",
+    },
+)
+workflow_builder.add_conditional_edges(
+    "unstructured_query_agent_tools",
+    is_complete,
+    {True: END, False: "unstructured_query_agent"},
+)
+
 workflow_builder.add_edge("out_of_scope_handler", END)
 
 workflow = workflow_builder.compile()
