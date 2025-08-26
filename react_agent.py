@@ -3,7 +3,7 @@ from langchain_core.messages import SystemMessage, AIMessage
 from graph_state import UserQueryState
 from prompt import read_prompt_file
 from llm import llm
-from app.const import MAX_ITERATIONS
+from app.const import MAX_ITERATIONS, DEFAULT_PARALLEL_TOOL_CALLS
 
 
 def react_agent_node(
@@ -38,7 +38,7 @@ def react_agent_node(
     # Bind the tools to the LLM and invoke it with the current messages
     llm_with_tools = llm.bind_tools(
         tools=agent_tool_list,
-        parallel_tool_calls=False,
+        parallel_tool_calls=DEFAULT_PARALLEL_TOOL_CALLS,
     )
     response = llm_with_tools.invoke(state["messages"] + new_messages)
 
