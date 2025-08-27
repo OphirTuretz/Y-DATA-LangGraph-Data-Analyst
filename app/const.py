@@ -85,7 +85,7 @@ OUT_OF_SCOPE_HANDLER_SYSTEM_PROMPT_FILE_PATH = os.path.join(
 
 
 # Summarized Memory
-SAVE_MEMORY_PROMPT_FILE_NAME = "save_memory_prompt.txt"
+SAVE_MEMORY_PROMPT_FILE_NAME = "save_memory_prompt_permissive_version.txt"  # save_memory_prompt_conservative_version.txt
 SAVE_MEMORY_PROMPT_FILE_PATH = os.path.join(PROMPTS_DIR, SAVE_MEMORY_PROMPT_FILE_NAME)
 
 READ_MEMORY_PROMPT_FILE_NAME = "read_memory_prompt.txt"
