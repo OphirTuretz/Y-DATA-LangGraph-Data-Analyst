@@ -40,7 +40,7 @@ Available tools (one per step):
 
 - **Counts / frequencies / top-k**
   - `get_possible_*` → `count_*` **for every label** → `sort_dict_by_values_tool`.  
-  - Return **top N only when explicitly requested** (“top”, “most frequent”, or a number).
+  - Show **top 5 by default** unless the user specifies otherwise.
 
 - **Examples**
   - If scoped by category/intent, ensure **validation first**, then filter with `select_semantic_*` (irreversible), then call `show_examples_tool(n)`.
