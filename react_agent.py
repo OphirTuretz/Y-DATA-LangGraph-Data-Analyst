@@ -32,7 +32,17 @@ def react_agent_node(
     # If this is the first iteration, add the system prompt to the messages
     new_messages = []
     if iteration_count == 0:
-        system_prompt = read_prompt_file(system_prompt_file_path)
+
+        concise_history = state.get("concise_history", [])
+
+        if not concise_history:
+            history = "No relevant conversation history."
+        else:
+            history = "\n".join([f"{m.pretty_repr()}" for m in concise_history])
+
+        system_prompt = read_prompt_file(system_prompt_file_path).format(
+            history=history
+        )
         new_messages = [SystemMessage(content=system_prompt)]
 
     # Bind the tools to the LLM and invoke it with the current messages

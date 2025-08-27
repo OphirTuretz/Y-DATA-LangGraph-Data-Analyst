@@ -2,7 +2,7 @@ import uuid
 from langchain_core.runnables import RunnableConfig
 from langgraph.config import get_store
 from pydantic import BaseModel, Field
-from langchain_core.messages import SystemMessage, AIMessage
+from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 
 
 from graph_state import UserQueryState
@@ -50,6 +50,11 @@ def save_memory_node(state: UserQueryState, config: RunnableConfig) -> UserQuery
 
     user_query = state["user_query"]
     final_response = state["final_response"]
+
+    state["concise_history"] = [
+        HumanMessage(content=user_query),
+        AIMessage(content=final_response),
+    ]
 
     system_propmt = read_prompt_file(SAVE_MEMORY_PROMPT_FILE_PATH).format(
         user_query=user_query,

@@ -27,16 +27,17 @@ def process_user_query(
     initial_state = {
         "user_query": user_query,
         "query_classification_result": {},
-        "messages": [],
         "is_complete": False,
         "final_response": None,
         "iteration_count": 0,
         "memory_saved": False,
     }
 
-    # Initialize dataset based on whether thread has history
+    # Initialize dataset and messages based on whether thread has history
     if not has_history:
         initial_state["dataset"] = Dataset()  # Fresh dataset for new thread
+        initial_state["messages"] = []
+        initial_state["concise_history"] = []
         log_fn(f"Initialized fresh dataset for new thread {thread_id}")
 
     # Configure with proper user_id and thread_id
