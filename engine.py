@@ -6,7 +6,6 @@ from data import Dataset
 
 def process_user_query(
     user_query: str,
-    log_fn: Callable[[str], None] = print,
     user_id: str = None,
     thread_id: str = None,
     has_history: bool = False,
@@ -15,7 +14,6 @@ def process_user_query(
 
     Args:
         user_query (str): The user's question
-        log_fn (callable): Logging function
         user_id (str): The user ID for this conversation
         thread_id (str): The thread ID for this conversation
         has_history (bool): Whether this thread has existing conversation history
@@ -38,7 +36,7 @@ def process_user_query(
         initial_state["dataset"] = Dataset()  # Fresh dataset for new thread
         initial_state["messages"] = []
         initial_state["concise_history"] = []
-        log_fn(f"Initialized fresh dataset for new thread {thread_id}")
+        print(f"Initialized fresh dataset for new thread {thread_id}")
 
     # Configure with proper user_id and thread_id
     config = {
@@ -49,15 +47,15 @@ def process_user_query(
         },
     }
 
-    log_fn(
+    print(
         f"Processing query through workflow for user {user_id}, thread {thread_id}..."
     )
     final_state = workflow.invoke(initial_state, config)
 
     for m in final_state["messages"]:
-        log_fn(m.pretty_repr())
+        print(m.pretty_repr())
 
-    log_fn("Workflow processing complete.")
+    print("Workflow processing complete.")
 
     return {
         "response": final_state["final_response"],
