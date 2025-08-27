@@ -17,6 +17,10 @@ def get_possible_intents_tool(
 ) -> Command:
     """
     Get a list of possible intents from the dataset.
+    Args:
+        reasoning (str): Reasoning for the function call.
+    Returns:
+        List of possible intents.
     """
     return Command(
         update={
@@ -38,6 +42,10 @@ def get_possible_categories_tool(
 ) -> Command:
     """
     Get a list of possible categories from the dataset.
+    Args:
+        reasoning (str): Reasoning for the function call.
+    Returns:
+        List of possible categories.
     """
     return Command(
         update={
@@ -62,6 +70,11 @@ def select_semantic_intent_tool(
 ) -> Command:
     """
     Select rows from the dataset where the 'intent' column matches any of the provided intent names.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        intent_names (List[str]): List of intent names to filter by.
+    Returns:
+        List of selected intents and number of rows after filtering.
     """
     dataset = dataset.select_semantic_intent(intent_names)
     return Command(
@@ -91,6 +104,11 @@ def select_semantic_category_tool(
 ) -> Command:
     """
     Select rows from the dataset where the 'category' column matches any of the provided category names.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        category_names (List[str]): List of category names to filter by.
+    Returns:
+        List of selected categories and number of rows after filtering.
     """
     dataset = dataset.select_semantic_category(category_names)
     return Command(
@@ -119,6 +137,11 @@ def finish_tool(
 ) -> Command:
     """
     Finish the conversation with a final answer.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        final_response (str): The final response to return to the user.
+    Returns:
+        The final response.
     """
     return Command(
         update={

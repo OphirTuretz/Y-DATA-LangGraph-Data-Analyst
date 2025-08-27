@@ -32,6 +32,12 @@ def sum_tool(
 ) -> Command:
     """
     Sum two numbers.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        a (int): First number to sum.
+        b (int): Second number to sum.
+    Returns:
+        The sum of the two numbers.
     """
     result = a + b
     return Command(
@@ -55,6 +61,12 @@ def sort_dict_by_values_tool(
 ) -> Command:
     """
     Sort a dictionary by its values.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        d (str): The dictionary in JSON string format to sort.
+        ascending (bool): Whether to sort in ascending order. Default is False (descending).
+    Returns:
+        The sorted dictionary.
     """
     try:
         d_dict = json.loads(d)
@@ -93,6 +105,11 @@ def len_tool(
 ) -> Command:
     """
     Returns the number of items in an object, e.g., list, string, dictionary.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        object (str): The object in JSON string format to evaluate length.
+    Returns:
+        The length of the object.
     """
     try:
         length = len(json.loads(object))
@@ -129,6 +146,11 @@ def count_category_tool(
 ) -> Command:
     """
     Count the number of rows in the DataFrame that match a specific category.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        category (str): The category to count in the dataset.
+    Returns:
+        The count of rows matching the category.
     """
     count = dataset.count_category(category)
     return Command(
@@ -152,6 +174,11 @@ def count_intent_tool(
 ) -> Command:
     """
     Count the number of rows in the DataFrame that match a specific intent.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        intent (str): The intent to count in the dataset.
+    Returns:
+        The count of rows matching the intent.
     """
     count = dataset.count_intent(intent)
     return Command(
@@ -174,6 +201,10 @@ def count_rows_tool(
 ) -> Command:
     """
     Get the number of rows in the DataFrame.
+    Args:
+        reasoning (str): Reasoning for the function call.
+    Returns:
+        The number of rows in the DataFrame.
     """
     count = dataset.count_rows()
     return Command(
@@ -197,6 +228,11 @@ def show_examples_tool(
 ) -> Command:
     """
     Show a sample of n examples from the DataFrame.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        n (int): Number of examples to show.
+    Returns:
+        A list of n examples from the DataFrame.
     """
     examples_df = dataset.show_examples(n)
     examples_dict = examples_df.to_dict(orient="records")

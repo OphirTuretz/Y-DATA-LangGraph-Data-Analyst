@@ -51,6 +51,11 @@ def summarize_tool(
 ) -> Command:
     """
     Summarize a user request using the dataset.
+    Args:
+        reasoning (str): Reasoning for the function call.
+        user_request (str): The user request to summarize.
+    Returns:
+        A summary of the user request based on the dataset.
     """
     n_batches = SUMMARIZE_DEFAULT_N_BATCHES
     batch_size = SUMMARIZE_DEFAULT_BATCH_SIZE
