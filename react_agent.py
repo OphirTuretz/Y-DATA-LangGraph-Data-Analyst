@@ -38,7 +38,9 @@ def react_agent_node(
         if not concise_history:
             history = "No relevant conversation history."
         else:
-            history = "\n".join([f"{m.pretty_repr()}" for m in concise_history])
+            history = "\n".join(
+                [f"{k}: {v}" for m in concise_history for k, v in m.items()]
+            )
 
         system_prompt = read_prompt_file(system_prompt_file_path).format(
             history=history

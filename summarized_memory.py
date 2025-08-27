@@ -51,10 +51,9 @@ def save_memory_node(state: UserQueryState, config: RunnableConfig) -> UserQuery
     user_query = state["user_query"]
     final_response = state["final_response"]
 
-    state["concise_history"] = [
-        HumanMessage(content=user_query),
-        AIMessage(content=final_response),
-    ]
+    state["concise_history"].append(
+        {"Human User Query": user_query, "AI Final Response": final_response}
+    )
 
     system_propmt = read_prompt_file(SAVE_MEMORY_PROMPT_FILE_PATH).format(
         user_query=user_query,
