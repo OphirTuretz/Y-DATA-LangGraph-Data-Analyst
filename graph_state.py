@@ -1,6 +1,6 @@
 from typing_extensions import TypedDict
 from langgraph.graph.message import add_messages
-from typing import Annotated, List
+from typing import Annotated
 
 from data import Dataset
 
@@ -13,4 +13,4 @@ class UserQueryState(TypedDict):
     is_complete: bool
     final_response: str
     iteration_count: int
-    # function_results: List[str]
+    memory_saved: bool

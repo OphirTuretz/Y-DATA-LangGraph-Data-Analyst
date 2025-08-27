@@ -31,6 +31,7 @@ def process_user_query(
         "is_complete": False,
         "final_response": None,
         "iteration_count": 0,
+        "memory_saved": False,
     }
 
     # Initialize dataset based on whether thread has history

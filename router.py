@@ -13,6 +13,7 @@ class QueryLabel(str, Enum):
     structured = "structured"
     unstructured = "unstructured"
     out_of_scope = "out-of-scope"
+    memory = "memory"
 
 
 class QueryClassification(BaseModel):
