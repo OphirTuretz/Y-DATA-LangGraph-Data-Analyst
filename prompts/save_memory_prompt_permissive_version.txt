@@ -27,11 +27,11 @@ Do NOT save:
 4) Keep the memory short (≤2 sentences) and specific to this dataset app.
 
 ### Output schema
-{
+{{
   "reasoning": "Briefly justify why this should/should not be saved (refer to user_query/analyst_response/past_memories).",
   "should_save": true/false,
   "summary": "Short, precise memory (empty string if should_save=false)."
-}
+}}
 
 ### Style
 - Be factual and neutral.  
