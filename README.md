@@ -114,13 +114,17 @@ Tested with **Python 3.13.7**.
 ├── engine.py                   # Query processing wrapper
 ├── graph.py                    # LangGraph workflow definition
 ├── graph_state.py              # Shared state schema
+├── router.py                   # Query classifier
+├── react_agent.py              # ReAct node implementation
 ├── structured_query_agent.py   # Structured agent + tools
 ├── unstructured_query_agent.py # Unstructured agent + summarization
 ├── out_of_scope_query_handler.py
 ├── summarized_memory.py        # Save/read memory nodes
 ├── id_manager.py               # User & thread persistence (SQLite)
+├── llm.py                      # LLM global instance
 ├── data.py                     # Dataset wrapper
 ├── general_tools.py            # Shared tools
+├── prompt.py                   # Load system prompt templates
 ├── cleanup.py                  # Utility to reset DBs
 ├── app/const.py                # Config & constants
 ├── prompts/                    # System prompt templates
