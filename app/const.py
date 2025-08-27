@@ -7,6 +7,7 @@ DATE_TIME_PATTERN = "%H:%M:%S"
 # Constants for file paths
 PROMPTS_DIR = "prompts"
 DB_DIR = "."
+IMAGES_DIR = "images"
 
 # Dataset
 DATASET_NAME = "bitext/Bitext-customer-support-llm-chatbot-training-dataset"
@@ -90,3 +91,10 @@ SAVE_MEMORY_PROMPT_FILE_PATH = os.path.join(PROMPTS_DIR, SAVE_MEMORY_PROMPT_FILE
 
 READ_MEMORY_PROMPT_FILE_NAME = "read_memory_prompt.txt"
 READ_MEMORY_PROMPT_FILE_PATH = os.path.join(PROMPTS_DIR, READ_MEMORY_PROMPT_FILE_NAME)
+
+
+# Graph Viz
+GRAPH_VISUALIZATION_FILE_NAME_BASE = "graph_viz"
+GRAPH_VISUALIZATION_FILE_NAME_BASE_FULL_PATH = os.path.join(
+    IMAGES_DIR, GRAPH_VISUALIZATION_FILE_NAME_BASE
+)

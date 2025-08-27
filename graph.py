@@ -16,7 +16,28 @@ from unstructured_query_agent import (
 )
 from out_of_scope_query_handler import out_of_scope_handler_node
 from summarized_memory import save_memory_node, read_memory_node
-from app.const import CHECKPOINTER_DB_FILE_PATH, STORE_DB_FILE_PATH
+from app.const import (
+    CHECKPOINTER_DB_FILE_PATH,
+    STORE_DB_FILE_PATH,
+    GRAPH_VISUALIZATION_FILE_NAME_BASE_FULL_PATH,
+)
+
+
+def save_graph_visualization(
+    graph, filename_base_full_path=GRAPH_VISUALIZATION_FILE_NAME_BASE_FULL_PATH
+):
+    try:
+        # Get the graph representation
+        graph_image = graph.get_graph(xray=True)
+
+        # Save Mermaid source code
+        mermaid_code = graph_image.draw_mermaid()
+        with open(f"{filename_base_full_path}.mmd", "w") as f:
+            f.write(mermaid_code)
+        print(f"Mermaid source saved as {filename_base_full_path}.mmd")
+
+    except Exception as e:
+        print(f"Error saving graph: {e}")
 
 
 def is_complete(state: UserQueryState) -> bool:
