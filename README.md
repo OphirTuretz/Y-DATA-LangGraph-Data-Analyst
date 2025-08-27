@@ -94,7 +94,7 @@ Tested with **Python 3.13.7**.
 ## 🧠 LangGraph Architecture
 
 <p align="center">
-  <img src="images/Architecture_Diagram.svg" alt="LangGraph workflow diagram" />
+  <img src="images/graph_viz.svg" alt="LangGraph workflow diagram" />
 </p>
 
 - **Router Node** → classifies the query.  

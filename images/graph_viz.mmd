@@ -1,0 +1,35 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+    __start__([<p>__start__</p>]):::first
+    router(router)
+    structured_query_agent(structured_query_agent)
+    structured_query_agent_tools(structured_query_agent_tools)
+    unstructured_query_agent(unstructured_query_agent)
+    unstructured_query_agent_tools(unstructured_query_agent_tools)
+    out_of_scope_handler(out_of_scope_handler)
+    save_memory(save_memory)
+    read_memory(read_memory)
+    __end__([<p>__end__</p>]):::last
+    __start__ --> router;
+    out_of_scope_handler --> save_memory;
+    read_memory --> save_memory;
+    router -. query_label_out_of_scope .-> out_of_scope_handler;
+    router -. query_label_memory .-> read_memory;
+    router -. query_label_structured .-> structured_query_agent;
+    router -. query_label_unstructured .-> unstructured_query_agent;
+    structured_query_agent -. True .-> save_memory;
+    structured_query_agent -. False .-> structured_query_agent_tools;
+    structured_query_agent_tools -. True .-> save_memory;
+    structured_query_agent_tools -. False .-> structured_query_agent;
+    unstructured_query_agent -. True .-> save_memory;
+    unstructured_query_agent -. False .-> unstructured_query_agent_tools;
+    unstructured_query_agent_tools -. True .-> save_memory;
+    unstructured_query_agent_tools -. False .-> unstructured_query_agent;
+    save_memory --> __end__;
+    classDef default fill:#f2f0ff,line-height:1.2
+    classDef first fill-opacity:0
+    classDef last fill:#bfb6fc
