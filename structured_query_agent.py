@@ -32,13 +32,6 @@ def sum_tool(
 ) -> Command:
     """
     Sum two numbers.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        a (int): First number to sum.
-        b (int): Second number to sum.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing the sum of a and b.
     """
     result = a + b
     return Command(
@@ -62,13 +55,6 @@ def sort_dict_by_values_tool(
 ) -> Command:
     """
     Sort a dictionary by its values.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        d (str): A JSON data object that can be translated to dictionary by json.loads() to sort by its values.
-        tool_call_id (str): The tool call ID for tracking.
-        ascending (bool): Whether to sort in ascending order. Defaults to False.
-    Returns:
-        Command: A command containing the sorted dictionary.
     """
     try:
         d_dict = json.loads(d)
@@ -107,12 +93,6 @@ def len_tool(
 ) -> Command:
     """
     Returns the number of items in an object, e.g., list, string, dictionary.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        object (str): A JSON object that can be translated to a sequence or a collection by json.loads() to count the number of items in it.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing the length of the object.
     """
     try:
         length = len(json.loads(object))
@@ -149,13 +129,6 @@ def count_category_tool(
 ) -> Command:
     """
     Count the number of rows in the DataFrame that match a specific category.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        category (str): Category to count in the DataFrame.
-        dataset (Dataset): The dataset to operate on.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing the count of rows matching the specified category.
     """
     count = dataset.count_category(category)
     return Command(
@@ -179,13 +152,6 @@ def count_intent_tool(
 ) -> Command:
     """
     Count the number of rows in the DataFrame that match a specific intent.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        intent (str): Intent to count in the DataFrame.
-        dataset (Dataset): The dataset to operate on.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing the count of rows matching the specified intent.
     """
     count = dataset.count_intent(intent)
     return Command(
@@ -208,12 +174,6 @@ def count_rows_tool(
 ) -> Command:
     """
     Get the number of rows in the DataFrame.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        dataset (Dataset): The dataset to operate on.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing the number of rows in the DataFrame.
     """
     count = dataset.count_rows()
     return Command(
@@ -237,13 +197,6 @@ def show_examples_tool(
 ) -> Command:
     """
     Show a sample of n examples from the DataFrame.
-    Args:
-        reasoning (str): Reasoning for the function call.
-        n (int): Number of examples to show from the DataFrame.
-        dataset (Dataset): The dataset to operate on.
-        tool_call_id (str): The tool call ID for tracking.
-    Returns:
-        Command: A command containing n random samples from the dataset.
     """
     examples_df = dataset.show_examples(n)
     examples_dict = examples_df.to_dict(orient="records")
