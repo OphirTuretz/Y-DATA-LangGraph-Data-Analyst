@@ -25,11 +25,11 @@ Do NOT save:
 3) Return a JSON object matching the schema below.
 
 ### Output schema
-{
+{{
   "reasoning": "Briefly justify why this should/should not be saved (refer to user_query/analyst_response/past_memories).",
   "should_save": true/false,
   "summary": "Short, precise memory (empty string if should_save=false)."
-}
+}}
 
 ### Style
 - Be factual and neutral; no assumptions.

@@ -37,8 +37,8 @@ class MemorySummaryRead(BaseModel):
 
 def save_memory_node(state: UserQueryState, config: RunnableConfig) -> UserQueryState:
 
-    store = get_store(config)
-    user_id = config["configurable"]["user_id"]
+    store = get_store()
+    user_id = config["configurable"].get("user_id")
 
     namespace = ("user_memories", user_id)
     memories = store.search(namespace, limit=20)
@@ -53,7 +53,7 @@ def save_memory_node(state: UserQueryState, config: RunnableConfig) -> UserQuery
 
     system_propmt = read_prompt_file(SAVE_MEMORY_PROMPT_FILE_PATH).format(
         user_query=user_query,
-        final_response=final_response,
+        analyst_response=final_response,
         past_memories=past_memories,
     )
 
@@ -72,8 +72,8 @@ def save_memory_node(state: UserQueryState, config: RunnableConfig) -> UserQuery
 
 def read_memory_node(state: UserQueryState, config: RunnableConfig) -> UserQueryState:
 
-    store = get_store(config)
-    user_id = config["configurable"]["user_id"]
+    store = get_store()
+    user_id = config["configurable"].get("user_id")
 
     namespace = ("user_memories", user_id)
     memories = store.search(namespace, limit=50)

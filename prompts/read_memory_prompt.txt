@@ -15,10 +15,10 @@ You are given:
 4) Return a structured JSON object that matches the schema below.
 
 ### Output schema
-{
+{{
   "reasoning": "Explain briefly how the past memories are relevant to the user query.",
   "relevant_memories": "A short, user-friendly message summarizing the relevant past memories in natural language."
-}
+}}
 
 ### Guidelines
 - Be **concise** and **factual**; avoid speculation.  

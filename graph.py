@@ -89,11 +89,15 @@ workflow_builder.add_edge("read_memory", "save_memory")
 
 workflow_builder.add_edge("save_memory", END)
 
-checkpointer_conn = sqlite3.connect(CHECKPOINTER_DB_FILE_PATH, check_same_thread=False)
+checkpointer_conn = sqlite3.connect(
+    CHECKPOINTER_DB_FILE_PATH, check_same_thread=False, isolation_level=None
+)
 serde = JsonPlusSerializer(pickle_fallback=True)
 checkpointer = SqliteSaver(checkpointer_conn, serde=serde)
 
-store_conn = sqlite3.connect(STORE_DB_FILE_PATH, check_same_thread=False)
+store_conn = sqlite3.connect(
+    STORE_DB_FILE_PATH, check_same_thread=False, isolation_level=None
+)
 store = SqliteStore(store_conn)
 
 workflow = workflow_builder.compile(checkpointer=checkpointer, store=store)
